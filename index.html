@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎉 Happy Birthday </title>
+  <meta name="description" content="A cute, mobile-first birthday wish template with confetti, balloons, typewriter message, and share button — all in one HTML file." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E%F0%9F%8E%88%3C/text%3E%3C/svg%3E" />
+  <style>
+    :root{
+      --bg1: 255 115 150;
+      --bg2: 102 126 234;
+      --card: 255 255 255;
+      --ink: 20 20 20;
+      --muted: 100 100 100;
+      --accent: 255 199 0;
+      --shadow: 0 10px 30px rgba(0,0,0,.15);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color: rgb(var(--ink));
+      background: linear-gradient(120deg, rgb(var(--bg1)) 0%, rgb(var(--bg2)) 100%);
+      background-size: 200% 200%;
+      animation: shift 18s ease infinite;
+      overflow-x:hidden;
+    }
+    @keyframes shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    .wrap{min-height:100dvh; display:grid; place-items:center; padding: clamp(16px, 3vw, 40px);}  
+    .card{
+      width:min(820px, 100%);
+      background: rgba(var(--card), .75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.45);
+      box-shadow: var(--shadow);
+      border-radius: 22px;
+      overflow:hidden;
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; padding:14px 16px; background: rgba(255,255,255,.55);
+      border-bottom: 1px solid rgba(255,255,255,.5);
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px}
+    .brand .logo{height:36px;width:36px;border-radius:12px;display:grid;place-items:center;background: #fff}
+    .brand .logo span{filter: drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+
+    .controls{display:flex; gap:8px; flex-wrap:wrap}
+    button, .ghost{
+      --p: 12px;
+      appearance:none; border:0; padding: var(--p) 14px; border-radius: 999px; cursor:pointer; font-weight: 700;
+    }
+    .primary{background: linear-gradient(90deg, #ffb457, #ff477e); color:#fff; box-shadow:0 6px 18px rgba(255,89,125,.35)}
+    .ghost{background:rgba(255,255,255,.9); color:rgb(var(--ink)); border:1px solid rgba(0,0,0,.06)}
+    .icon-btn{padding:10px; width:40px; display:grid; place-items:center}
+
+    .hero{display:grid; grid-template-columns: 110px 1fr; gap:16px; padding:18px 18px 8px}
+    .avatar{
+      width:110px; height:110px; border-radius:20px; overflow:hidden; position:relative; border:2px solid rgba(255,255,255,.8);
+    }
+    .avatar img{width:100%; height:100%; object-fit:cover}
+
+    .info{display:flex; flex-direction:column; gap:6px}
+    .kicker{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:rgb(var(--muted))}
+    h1{margin:0; font-size: clamp(24px, 4.8vw, 40px)}
+    .sub{color: rgb(var(--muted)); font-size: 14px}
+
+    .grid{display:grid; gap:14px; grid-template-columns: repeat(12, 1fr); padding:12px 18px 22px}
+    .panel{grid-column: span 12; background: rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.7); border-radius:16px; padding:14px}
+    .message{min-height:120px; font-size: clamp(16px, 3.8vw, 18px); line-height:1.45}
+
+    .cta{display:flex; gap:10px; flex-wrap:wrap}
+    .foot{display:flex;align-items:center;justify-content:space-between; gap:10px; padding:12px 16px; border-top:1px dashed rgba(0,0,0,.08); background:rgba(255,255,255,.55)}
+    .tiny{font-size:12px;color:rgb(var(--muted))}
+    .balloon{position:absolute; bottom:-20vh; width:60px; aspect-ratio:1/1.2; background:#ff89c0; border-radius:50% 50% 48% 52%; box-shadow: inset -8px -12px 24px rgba(0,0,0,.08);}
+    .balloon:after{content:""; position:absolute; bottom:-12px; left:50%; transform:translateX(-50%); width:2px; height:60px; background:rgba(255,255,255,.6)}
+    .b2{background:#ffd166}
+    .b3{background:#90f7d8}
+    .b4{background:#a8c5ff}
+    @keyframes floaty{ from{ transform: translateY(0) rotate(0deg)} to{ transform: translateY(-120vh) rotate(6deg)} }
+    .balloon{ animation: floaty linear infinite; opacity:.85 }
+    canvas#fx{position:fixed; inset:0; pointer-events:none; z-index: 40}
+    .hidden{display:none}
+    @media (max-width:560px){
+      .hero{grid-template-columns: 90px 1fr}
+      .avatar{width:90px;height:90px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Confetti layer -->
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div id="sky" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <article class="card" id="card">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"><span>🎂</span></div>
+          <div>Birthday Wish</div>
+        </div>
+        <div class="controls">
+          <button class="ghost icon-btn" id="musicBtn">🔊</button>
+          <button class="ghost icon-btn" id="themeBtn">✨</button>
+          <button class="primary" id="celebrateBtn">Open Wish 🎉</button>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="avatar">
+          <!-- 🔒 Fixed photo (change src manually) -->
+          <img id="avatar" alt="Birthday person" src="s.jpeg" />
+        </div>
+        <div class="info">
+          <span class="kicker">Happy Birthday</span>
+          <h1 id="headline">Dear <span id="name">Friend</span> 🎈</h1>
+          <div class="sub" id="sub">Wishing you joy, laughter, and cake as sweet as you are.</div>
+          <div class="cta">
+            <button class="primary" id="wishBtn">Send Hugs 🤗</button>
+            <button class="ghost" id="shareBtn">Share this page 🔗</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="panel" id="msgPanel">
+          <div class="kicker">From Me to You</div>
+          <div class="message" id="typewriter"></div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <div class="tiny">Made with 💛 — Arpan</div>
+        <div class="tiny">© <span id="year"></span></div>
+      </footer>
+    </article>
+  </div>
+
+  <script>
+    const CONFIG = {
+      name: 'Soumyajyoti',
+      customMessage: `On your special day, I hope your heart is as light as these balloons and your smile as bright as the candles.\n\nThanks for being amazing — may this year bring new adventures, cozy mornings, and a little extra magic in every moment.\n\nHappy Birthday! 🎉`,
+    };
+    document.getElementById('name').textContent = CONFIG.name;
+    document.getElementById('headline').querySelector('#name').textContent = CONFIG.name;
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const typebox = document.getElementById('typewriter');
+    function typeWriter(text, speed=24){
+      typebox.innerHTML='';
+      let i=0; const brText = text.replace(/\n/g,'<br>');
+      const tick = ()=>{
+        typebox.innerHTML = brText.slice(0, i++);
+        if(i<=brText.length){ requestAnimationFrame(()=>setTimeout(tick, 1000/speed)); }
+      };
+      tick();
+    }
+    typeWriter(CONFIG.customMessage);
+
+    const sky = document.getElementById('sky');
+    function spawnBalloons(n=10){
+      for(let i=0;i<n;i++){
+        const b = document.createElement('div');
+        b.className = 'balloon b'+(i%4+1);
+        const left = Math.random()*100;
+        const dur = 12 + Math.random()*10;
+        const delay = -Math.random()*dur;
+        const scale = .7 + Math.random()*0.8;
+        b.style.left = left+"vw";
+        b.style.animationDuration = dur+"s";
+        b.style.animationDelay = delay+"s";
+        b.style.transform = `translateY(0) scale(${scale})`;
+        sky.appendChild(b);
+      }
+    }
+    spawnBalloons(16);
+
+    const canvas = document.getElementById('fx');
+    const ctx = canvas.getContext('2d');
+    let W=0,H=0; let pieces=[]; let animId=null;
+    const colors = ['#ff4d6d','#ffd166','#60d394','#80ed99','#a0c4ff','#bdb2ff','#f1c0e8'];
+    function resize(){ W=canvas.width=innerWidth*devicePixelRatio; H=canvas.height=innerHeight*devicePixelRatio; }
+    window.addEventListener('resize', resize); resize();
+    function shootConfetti(count=220){
+      pieces = Array.from({length:count}, ()=>({
+        x: Math.random()*W, y: -20, vx: (Math.random()-.5)*3, vy: 2+Math.random()*4,
+        size: 6+Math.random()*10, rot: Math.random()*Math.PI, vr: (Math.random()-.5)*0.2,
+        color: colors[Math.floor(Math.random()*colors.length)], ttl: 240+Math.random()*120
+      }));
+      if(animId) cancelAnimationFrame(animId);
+      loop();
+    }
+    function loop(){
+      ctx.clearRect(0,0,W,H);
+      pieces.forEach(p=>{
+        p.ttl--; p.x+=p.vx; p.y+=p.vy; p.vy+= 0.02; p.rot+=p.vr;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.fillStyle = p.color; ctx.fillRect(-p.size/2, -p.size/3, p.size, p.size/2);
+        ctx.restore();
+      });
+      pieces = pieces.filter(p=>p.ttl>0 && p.y < H+40);
+      if(pieces.length>0) animId = requestAnimationFrame(loop);
+    }
+
+    const celebrateBtn = document.getElementById('celebrateBtn');
+    const themeBtn = document.getElementById('themeBtn');
+    const musicBtn = document.getElementById('musicBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const wishBtn = document.getElementById('wishBtn');
+
+    // Music (simple beep melody)
+    let audioCtx=null; let isPlaying=false; let seqId=null;
+    const notes = [262,330,392,523,392,440,392,330,349,330,294,262];
+    function playMelody(){
+      if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      const tempo = 120; const beat = 60/tempo; let t = audioCtx.currentTime + 0.05;
+      notes.forEach((f, i)=>{
+        const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+        o.type = 'triangle'; o.frequency.value = f;
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.12, t+0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t+beat*0.9);
+        o.connect(g).connect(audioCtx.destination);
+        o.start(t); o.stop(t+beat);
+        t += beat*0.9;
+      });
+      seqId = setTimeout(()=> playMelody(), beat*notes.length*1000 + 600);
+      isPlaying = true; musicBtn.textContent = '🔊';
+    }
+    function stopMelody(){ if(seqId) clearTimeout(seqId); if(audioCtx){ audioCtx.suspend(); } isPlaying=false; musicBtn.textContent='🔈'; }
+
+    celebrateBtn.addEventListener('click', ()=>{ shootConfetti(); typeWriter(CONFIG.customMessage); playMelody(); });
+    themeBtn.addEventListener('click', ()=> shootConfetti(140));
+    musicBtn.addEventListener('click', ()=> isPlaying ? stopMelody() : playMelody());
+    wishBtn.addEventListener('click', ()=>{ shootConfetti(260); typeWriter('Sending the biggest virtual hug! 🤗\n\nHave a fabulous day, '+CONFIG.name+'!'); });
+
+    shareBtn.addEventListener('click', async ()=>{
+      const text = `Happy Birthday ${CONFIG.name}! 🎂\n\n${window.location.href}`;
+      if(navigator.share){ try{ await navigator.share({title:'Birthday Wish', text, url: location.href}); } catch(e){} }
+      else { navigator.clipboard.writeText(text); alert('Link copied! 🎉'); }
+    });
+
+    setTimeout(()=> shootConfetti(80), 600);
+  </script>
+</body>
+</html>
